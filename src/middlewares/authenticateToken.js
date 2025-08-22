@@ -9,7 +9,7 @@ function authenticateToken(req,res,next){
   jwt.verify(token , process.env.PRIVATE_KEY,(err,user)=>{
       if(err) return res.status(403).json({error:'Token expired'});
       req.role=user.role;
-      req.Uid = user.Uid;
+      req.uid = user.uid;
       next();
 
   });

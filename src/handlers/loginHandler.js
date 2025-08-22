@@ -25,7 +25,7 @@ async function loginHandler(req,res,db){
     if (!valid) return res.status(400).json({ message: "Invalid email or password" });
 
    
-    const payload = { Uid: user.id,  role: user.role };
+    const payload = { uid: user.uid,  role: user.role };
     const token = jwt.sign(payload, process.env.PRIVATE_KEY, { algorithm: 'HS256', expiresIn: '1h' });
 
     res.json({ token });
