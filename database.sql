@@ -11,7 +11,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE product (
-    Pid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    pid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title VARCHAR(36) NOT NULL,
     description VARCHAR(255) NOT NULL,
     category VARCHAR(36) NOT NULL,
