@@ -1,17 +1,12 @@
 const Joi = require("joi");
-const schemaId = Joi.object({
-    id:Joi.string().required()
-});
 
 
 async function getProductHandler(req,res,db){
     try{
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
+        const id = req.validatedId;
 
-        const selected = await db('product').select('*').where('pid','=',id).returning('*');
-        res.status(201).json(selected);
+        const selected = await db('product').select('*').where('pid','=',id);
+        res.status(200).json(selected);
     }
     catch(err){
         console.error(err);
@@ -22,8 +17,8 @@ async function getProductHandler(req,res,db){
 
 async function getProductsHandler(req,res,db){
     try{
-        const selected = await db('product').select('*').returning('*');
-        res.status(201).json(selected);
+        const selected = await db('product').select('*');
+        res.status(200).json(selected);
     }
     catch(err){
         console.error(err);
@@ -78,9 +73,7 @@ async function updateProductHandler(req,res,db){
     try{
         if (req.role != 'admin') return res.status(403).json({error : 'Cannot Access'});
 
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
+        const id = req.validatedId;
 
         const {error:bodyError , value:bodyValue }=schemaUpdated.validate(req.body);
         if(bodyError) return  res.status(400).json({error : bodyError.details[0].message});
@@ -95,7 +88,7 @@ async function updateProductHandler(req,res,db){
          
         const updated = await db('product').where('pid','=',id).update(product).returning('*');
         if (updated.length === 0) {
-            return res.status(404).json({ message: "Todo not found" });
+            return res.status(404).json({ message: "Product not found" });
         }
         res.status(201).json(updated);
     }
@@ -110,10 +103,7 @@ async function deleteProductHandler(req,res,db){
     try{
         if (req.role != 'admin') return res.status(403).json({error : 'Cannot Access'});
 
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
-         
+        const id = req.validatedId;
         await db('product').delete().where('pid','=',id);
        
         res.status(200).json({ message: 'Product Deleted successfully', id });

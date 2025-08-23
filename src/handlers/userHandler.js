@@ -1,15 +1,12 @@
 const Joi = require("joi");
 const bcrypt = require('bcrypt');
 
-const schemaId = Joi.object({
-    id:Joi.string().required()
-});
 
 async function getUsersHandler(req,res,db){
     try{
-        if (req.role != 'admin') return res.status(403).json({error : 'Cannot Access'});
-        const selected = await db('users').select('*').returning('*');
-        res.status(201).json(selected);
+        if (req.role !==  'admin') return res.status(403).json({error : 'Cannot Access'});
+        const selected = await db('users').select('*');
+        res.status(200).json(selected);
     }
     catch(err){
         console.error(err);
@@ -20,14 +17,12 @@ async function getUsersHandler(req,res,db){
 
 async function getUserHandler(req,res,db){
     try{
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
+        const id = req.validatedId;
 
         if (req.role !== 'admin' && req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
 
-        const selected = await db('users').select('*').where('uid','=',id).returning('*');
-        res.status(201).json(selected);
+        const selected = await db('users').select('*').where('uid','=',id);
+        res.status(200).json(selected);
     }
     catch(err){
         console.error(err);
@@ -46,11 +41,7 @@ const schemaUpdated = Joi.object({
 
 async function updateUserHandler(req,res,db){
     try{
-        
-
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
+        const id = req.validatedId;
 
         if (req.role !== 'admin' && req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
 
@@ -79,11 +70,7 @@ async function updateUserHandler(req,res,db){
 
 async function deleteUserHandler(req,res,db){
     try{
-
-        const {error : paramError , value : paramValue} = schemaId.validate(req.params);
-        if(paramError) return  res.status(400).json({error : paramError.details[0].message});
-        const {id} = paramValue;
-
+        const id = req.validatedId;
          
         if (req.role !== 'admin' && req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
         await db('users').delete().where('uid','=',id);

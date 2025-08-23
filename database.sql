@@ -20,8 +20,8 @@ CREATE TABLE product (
 );
 
 CREATE TABLE orders (
-    Oid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    userId UUID,
+    oid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    userid UUID,
     status VARCHAR(25) DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES users(Uid)
@@ -51,3 +51,9 @@ CREATE TABLE cart_items (
     FOREIGN KEY (cartId) REFERENCES carts(Cid),
     FOREIGN KEY (productId) REFERENCES product(Pid)
 );
+
+ALTER TABLE order_items
+ADD COLUMN price_at_purchase NUMERIC(12,2) NOT NULL
+
+ALTER TABLE orders 
+ADD COLUMN  total_amount NUMERIC(12,2) NOT NULL
