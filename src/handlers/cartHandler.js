@@ -7,8 +7,23 @@ async function getCartHandler(req,res,db){
         if (req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
 
        const [selected ]= await db('carts').select('*').where('userid','=',id); 
-        const cart = await db('cart_items').select('*').where('cartid','=',selected.cid);
-        res.status(200).json(cart);
+        const cart = await db('cart_items')
+            .join('product', 'cart_items.productid', '=', 'product.pid')
+            .select(
+                'cart_items.productid',
+                'cart_items.quantity',
+                'product.title',
+                'product.price'
+            )
+            .where('cart_items.cartid', '=', selected.cid);
+
+            const itemsWithSubtotal = cart.map(item => ({
+                ...item,
+                subtotal: item.quantity * Number(item.price)
+            }));
+        const totalAmount = itemsWithSubtotal.reduce((sum, item) => sum + item.subtotal, 0);
+        res.status(200).json({items: itemsWithSubtotal,
+            totalAmount});
     }
     catch(err){
         console.error(err);
@@ -33,7 +48,7 @@ async function createCartHandler(req,res,db){
         if(error) return res.status(400).json({error : error.details[0].message});
 
         let [cart] = await db('carts').select('*').where('userid','=',uid);
-        if(cart.length === 0 ){
+        if(!cart ){
             [cart]  = await db('carts').insert({userid : uid }).returning('*');
         }
         
@@ -41,8 +56,8 @@ async function createCartHandler(req,res,db){
         .select('*')
         .where('cartid','=',cart.cid )
         .andWhere('productid','=',value.product)
-        ;
-        if(existItem.length === 0 ){
+        .first();
+        if(!existItem ){
             const [inserted] = await db('cart_items').insert( {
                     cartid: cart.cid ,
                     productid: value.product,
@@ -53,7 +68,7 @@ async function createCartHandler(req,res,db){
         else{
            const [updateQuantity] = await db('cart_items')
            .where('cartid','=',cart.cid )
-           .update({quantity : existItem[0].quantity+value.quantity})
+           .update({quantity : existItem.quantity+value.quantity})
            .returning('*');
            res.status(201).json({ message: 'Item added to cart successfully',updateQuantity });
         }
@@ -111,21 +126,6 @@ async function updateCartHandler(req,res,db){
     }
 }
 
-async function deleteCartHandler(req,res,db){
-    try{
-        const id = req.validatedId;
-         
-        if (req.role !== 'admin' && req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
-        await db('users').delete().where('uid','=',id);
-       
-        res.status(200).json({ message: 'Product Deleted successfully', id });
-    }
-    catch(err){
-         console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-        
-    }
-}
 
 async function deleteCartItemHandler(req,res,db){
     try{
@@ -145,4 +145,4 @@ async function deleteCartItemHandler(req,res,db){
         
     }
 }
-module.exports = {getCartHandler,createCartHandler,updateCartHandler , deleteCartHandler , deleteCartItemHandler};
+module.exports = {getCartHandler,createCartHandler,updateCartHandler, deleteCartItemHandler};

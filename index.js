@@ -1,15 +1,18 @@
 const express = require("express");
 const db = require("./db");
 
-
+//handlers
 const {registerHandler} = require("./src/handlers/registerHandler.js");
 const {loginHandler} = require("./src/handlers/loginHandler.js");
 const {getProductHandler , addProductHandler , getProductsHandler ,updateProductHandler ,deleteProductHandler} = require("./src/handlers/productHandler.js");
-const {authenticateToken} = require("./src/middlewares/authenticateToken.js");
 const {getUsersHandler , getUserHandler ,updateUserHandler , deleteUserHandler} = require("./src/handlers/userHandler.js");
 const {getOrderHandler ,getOrdersHandler, createOrderHandler , updateOrderHandler } = require("./src/handlers/orderHandler.js");
-const {validateParamMiddleware} = require("./src/middlewares/validateParam.js"); 
-const {getCartHandler,createCartHandler,updateCartHandler , deleteCartHandler , deleteCartItemHandler} = require("./src/handlers/cartHandler.js")
+const {getCartHandler,createCartHandler,updateCartHandler  , deleteCartItemHandler} = require("./src/handlers/cartHandler.js");
+
+//middlewares
+const {authenticateToken} = require("./src/middlewares/authenticateToken.js");
+const {validateParamMiddleware} = require("./src/middlewares/validateParam.js");
+
 
 const app = express();
 const port  = 3000;
