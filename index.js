@@ -8,7 +8,8 @@ const {getProductHandler , addProductHandler , getProductsHandler ,updateProduct
 const {authenticateToken} = require("./src/middlewares/authenticateToken.js");
 const {getUsersHandler , getUserHandler ,updateUserHandler , deleteUserHandler} = require("./src/handlers/userHandler.js");
 const {getOrderHandler ,getOrdersHandler, createOrderHandler , updateOrderHandler } = require("./src/handlers/orderHandler.js");
-const {validateParamMiddleware} = require("./src/middlewares/validateParam.js");
+const {validateParamMiddleware} = require("./src/middlewares/validateParam.js"); 
+const {getCartHandler,createCartHandler,updateCartHandler , deleteCartHandler , deleteCartItemHandler} = require("./src/handlers/cartHandler.js")
 
 const app = express();
 const port  = 3000;
@@ -71,14 +72,19 @@ app.delete("/users/:id",[authenticateToken ,validateParamMiddleware]  , (req,res
     deleteUserHandler(req,res,db)
 );//admin can delete users and user can only delete himself
 
+app.delete("/users/:id",[authenticateToken ,validateParamMiddleware]  , (req,res) => 
+    deleteUserHandler(req,res,db)
+);//admin can delete users and user can only delete himself
 
 
 
-//Orders CRUD
+
+
+//Orders endpoints
 
 app.post("/orders",authenticateToken, (req,res) =>  
     createOrderHandler(req,res,db)
-); //user create order
+); //user create order from the cart_items and reset the cart
 
 app.get("/orders",authenticateToken, (req,res) => 
     getOrdersHandler(req,res,db)
@@ -91,6 +97,27 @@ app.get("/orders/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
 app.put("/orders/:id", [authenticateToken ,validateParamMiddleware],(req,res) => 
     updateOrderHandler(req,res,db)
 );//admin can edit order status
+
+
+
+
+//Cart endpoints
+
+app.post("/carts/items",authenticateToken, (req,res) => 
+    createCartHandler(req,res,db)
+); //create cart and add items to it
+
+app.get("/carts/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
+     getCartHandler(req,res,db)
+); // read your cart
+
+app.patch("/carts/items/:id", [authenticateToken ,validateParamMiddleware] ,(req,res) => 
+    updateCartHandler(req,res,db)
+);//increase or decrease quantity of an item
+
+app.delete("/carts/items/:id",[authenticateToken ,validateParamMiddleware]  , (req,res) => 
+    deleteCartItemHandler(req,res,db)
+);//delete item from cart
 
 
 

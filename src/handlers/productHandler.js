@@ -90,7 +90,7 @@ async function updateProductHandler(req,res,db){
         if (updated.length === 0) {
             return res.status(404).json({ message: "Product not found" });
         }
-        res.status(201).json(updated);
+        res.status(200).json(updated);
     }
     catch(err){
          console.error(err);

@@ -28,7 +28,7 @@ async function loginHandler(req,res,db){
     const payload = { uid: user.uid,  role: user.role };
     const token = jwt.sign(payload, process.env.PRIVATE_KEY, { algorithm: 'HS256', expiresIn: '1h' });
 
-    res.json({ token });
+    res.json({ token : token , userId : payload.uid});
 
   } catch (err) {
     console.error(err);
