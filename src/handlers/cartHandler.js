@@ -2,10 +2,9 @@ const Joi = require("joi");
 
 async function getCartHandler(req,res,db){
     try{
-        
-        const id = req.validatedId;
-        if (req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
-
+    
+        if (req.role !== 'user') return res.status(403).json({error : 'Cannot Access'});
+        const id = req.uid;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const offset = (page - 1) * limit;
@@ -13,7 +12,12 @@ async function getCartHandler(req,res,db){
         const order = req.query.order || 'asc';
 
         const [selected ]= await db('carts').select('*').where('userid','=',id);
-        const [{ count }] = await db('cart_items').count('*') .where('cart_items.cartid', '=', selected.cid);
+        const [{ count }] = await db('cart_items')
+        .join('product', 'cart_items.productid', '=', 'product.pid')
+        .count('*') 
+        .where('cart_items.cartid', '=', selected.cid)
+        .andWhere('product.stock', '>=', req.query.available || 1);
+        
         let query = db('cart_items')
             .join('product', 'cart_items.productid', '=', 'product.pid')
             .select(
@@ -122,23 +126,17 @@ async function updateCartHandler(req,res,db){
         if(bodyError) return  res.status(400).json({error : bodyError.details[0].message});
 
         const [selected ]= await db('carts').select('*').where('userid','=',uid);
-        let [updatedQuantity]  =await db('cart_items')
-        .select('quantity')
-        .where('cartid','=',selected.cid)
-        .andWhere('productid','=',productid);
-
-        if(bodyValue.quantity === 'increase' ){
-            updatedQuantity.quantity++;
-        }
-        else if(bodyValue.quantity === 'decrease'){
-            updatedQuantity.quantity--;
-        }
-
-        const updated = await db('cart_items')
-        .where('cartid','=',selected.cid)
-        .andWhere('productid','=',productid)
-        .update({quantity : updatedQuantity.quantity})
+        let updated = await db('cart_items')
+        .where('cartid', '=', selected.cid)
+        .andWhere('productid', '=', productid)
+        .update({
+            quantity: db.raw(
+                'quantity + ?',
+                [bodyValue.quantity === 'increase' ? 1 : bodyValue.quantity === 'decrease' ? -1 : 0]
+            )
+        })
         .returning('*');
+
 
         if (updated.length === 0) {
             return res.status(404).json({ message: "Product not found" });

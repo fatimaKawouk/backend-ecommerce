@@ -71,7 +71,7 @@ app.get("/users/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
      getUserHandler(req,res,db)
 ); // admin can read specific user and user can only read himself
 
-app.put("/users/:id", [authenticateToken ,validateParamMiddleware] ,(req,res) => 
+app.patch("/users/:id", [authenticateToken ,validateParamMiddleware] ,(req,res) => 
     updateUserHandler(req,res,db)
 );//admin can edit users and user can only edit himself
 
@@ -114,7 +114,7 @@ app.post("/carts/items",authenticateToken, (req,res) =>
     createCartHandler(req,res,db)
 ); //create cart and add items to it
 
-app.get("/carts/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
+app.get("/carts/items",authenticateToken , (req,res) =>
      getCartHandler(req,res,db)
 ); // read your cart
 

@@ -11,15 +11,10 @@ async function getOrderHandler(req,res,db){
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
         const offset = (page - 1) * limit;
-        const [{ count }] = await db('orders').count('*');
+        
         const sort = req.query.sort || 'total_amount';
         const order = req.query.order || 'asc';
-        let query = db('orders')
-        .select('*')
-        .where('userid','=',id)
-        .limit(limit)
-        .offset(offset)
-        .orderBy(sort,order);
+        let query = db('orders').where('userid','=',id);
 
         if(req.query.minAmount){
             query = query.where('total_amount', '>=', req.query.minAmount);
@@ -31,8 +26,11 @@ async function getOrderHandler(req,res,db){
             query = query.where('status', '=', req.query.status);
         }
 
-
-        const orders = await query;
+        const [{ count }] = await query.clone().count('*');
+        const orders = await query.select('*')
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
 
         res.status(200).json({ total: parseInt(count),
             page,
@@ -56,10 +54,8 @@ async function getOrdersHandler(req,res,db){
         const sort = req.query.sort || 'total_amount';
         const order = req.query.order || 'asc';
 
-        const [{ count }] = await db('orders').count('*');
-        let query =  db('orders').select('*').limit(limit)
-        .offset(offset)
-        .orderBy(sort,order);
+       
+        let query =  db('orders');
         
         if(req.query.minAmount){
             query = query.where('total_amount', '>=', req.query.minAmount);
@@ -69,8 +65,12 @@ async function getOrdersHandler(req,res,db){
         }
         if(req.query.status){
             query = query.where('status', '=', req.query.status);
-        }
-        const orders= await query;
+        } 
+        
+        const [{ count }] = await query.clone().count('*');
+        const orders= await query.select('*').limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
         res.status(200).json({total: parseInt(count),
             page,
             totalPages: Math.ceil(count / limit),

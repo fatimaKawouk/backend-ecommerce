@@ -57,3 +57,9 @@ ADD COLUMN price_at_purchase NUMERIC(12,2) NOT NULL
 
 ALTER TABLE orders 
 ADD COLUMN  total_amount NUMERIC(12,2) NOT NULL
+
+CREATE INDEX idx_product_pid ON product(pid);
+CREATE INDEX idx_user_uid ON users(uid);
+CREATE INDEX idx_cartItems ON cart_items(cartid,productid);
+CREATE INDEX idx_carts_userid ON carts(userid);
+CREATE INDEX idx_orders_userid ON orders(userid);

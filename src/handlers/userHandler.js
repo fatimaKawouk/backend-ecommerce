@@ -11,15 +11,17 @@ async function getUsersHandler(req,res,db){
         const sort = req.query.sort || 'uid';
         const order = req.query.order || 'asc';
 
-        const [{ count }] = await db('users').count('*');
-        let query =  db('users').select('*').limit(limit)
-        .offset(offset)
-        .orderBy(sort,order);
+        
+        let query =  db('users');
 
         if(req.query.role){
             query = query.where('role', '=', req.query.role);
         }
-        const selected = await query;
+        const [{ count }] = await query.clone().count('*');
+        const selected = await query.select('*').limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
+        
         res.status(200).json({
             total: parseInt(count),
             page,
@@ -66,12 +68,11 @@ async function updateUserHandler(req,res,db){
 
         const {error:bodyError , value:bodyValue }=schemaUpdated.validate(req.body);
         if(bodyError) return  res.status(400).json({error : bodyError.details[0].message});
-         const hashedPassword = await bcrypt.hash(bodyValue.password, 10);
-        const user = {
-            name: bodyValue.name,
-            email: bodyValue.email,
-            password : hashedPassword,
-        };
+        const user = {};
+        if (bodyValue.name) user.name = bodyValue.name;
+        if (bodyValue.email) user.email = bodyValue.email;
+        if (bodyValue.password) user.password = await bcrypt.hash(bodyValue.password, 10);
+
          
         const updated = await db('users').where('uid','=',id).update(user).returning('*');
 
