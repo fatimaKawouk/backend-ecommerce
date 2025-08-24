@@ -1,6 +1,8 @@
 const Joi = require("joi");
 
 
+
+       
 async function getProductHandler(req,res,db){
     try{
         const id = req.validatedId;
@@ -17,8 +19,21 @@ async function getProductHandler(req,res,db){
 
 async function getProductsHandler(req,res,db){
     try{
-        const selected = await db('product').select('*');
-        res.status(200).json(selected);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const offset = (page - 1) * limit;
+        const sort = req.query.sort || 'title';
+        const order = req.query.order || 'asc';
+        const [{ count }] = await db('product').count('*');
+        const selected = await db('product').select('*').limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
+        res.status(200).json({
+            total: parseInt(count),
+            page,
+            totalPages: Math.ceil(count / limit),
+            selected
+        });
     }
     catch(err){
         console.error(err);

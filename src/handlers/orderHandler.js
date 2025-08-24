@@ -8,8 +8,23 @@ async function getOrderHandler(req,res,db){
         const id = req.validatedId;
         if (req.role !== 'admin' && req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
 
-        const selected = await db('orders').select('*').where('userid','=',id);
-        res.status(200).json(selected);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const offset = (page - 1) * limit;
+        const [{ count }] = await db('orders').count('*');
+        const sort = req.query.sort || 'total_amount';
+        const order = req.query.order || 'asc';
+        const orders = await db('orders')
+        .select('*')
+        .where('userid','=',id)
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
+
+        res.status(200).json({ total: parseInt(count),
+            page,
+            totalPages: Math.ceil(count / limit),
+            orders});
     }
     catch(err){
         console.error(err);
@@ -21,8 +36,22 @@ async function getOrderHandler(req,res,db){
 async function getOrdersHandler(req,res,db){
     try{
         if (req.role !== 'admin') return res.status(403).json({error : 'Cannot Access'});
-        const selected = await db('orders').select('*');
-        res.status(200).json(selected);
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const offset = (page - 1) * limit;
+        const sort = req.query.sort || 'total_amount';
+        const order = req.query.order || 'asc';
+
+        const [{ count }] = await db('orders').count('*');
+
+        const orders= await db('orders').select('*').limit(limit)
+        .offset(offset)
+        .orderBy(sort,order);
+        res.status(200).json({total: parseInt(count),
+            page,
+            totalPages: Math.ceil(count / limit),
+            orders});
     }
     catch(err){
         console.error(err);

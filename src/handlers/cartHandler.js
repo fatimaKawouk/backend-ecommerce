@@ -6,7 +6,14 @@ async function getCartHandler(req,res,db){
         const id = req.validatedId;
         if (req.uid !== id ) return res.status(403).json({error : 'Cannot Access'});
 
-       const [selected ]= await db('carts').select('*').where('userid','=',id); 
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+        const sort = req.query.sort || 'title';
+        const order = req.query.order || 'asc';
+
+        const [selected ]= await db('carts').select('*').where('userid','=',id);
+        const [{ count }] = await db('cart_items').count('*') .where('cart_items.cartid', '=', selected.cid);
         const cart = await db('cart_items')
             .join('product', 'cart_items.productid', '=', 'product.pid')
             .select(
@@ -15,14 +22,19 @@ async function getCartHandler(req,res,db){
                 'product.title',
                 'product.price'
             )
-            .where('cart_items.cartid', '=', selected.cid);
+            .where('cart_items.cartid', '=', selected.cid).limit(limit)
+            .offset(offset)
+            .orderBy(sort, order);
 
             const itemsWithSubtotal = cart.map(item => ({
                 ...item,
                 subtotal: item.quantity * Number(item.price)
             }));
         const totalAmount = itemsWithSubtotal.reduce((sum, item) => sum + item.subtotal, 0);
-        res.status(200).json({items: itemsWithSubtotal,
+        res.status(200).json({total: parseInt(count),
+            page,
+            totalPages: Math.ceil(count / limit),
+            items: itemsWithSubtotal,
             totalAmount});
     }
     catch(err){
