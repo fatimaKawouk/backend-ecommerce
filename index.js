@@ -4,7 +4,7 @@ const db = require("./db");
 //handlers
 const {registerHandler} = require("./src/handlers/registerHandler.js");
 const {loginHandler} = require("./src/handlers/loginHandler.js");
-const {getProductHandler , addProductHandler , getProductsHandler ,updateProductHandler ,deleteProductHandler} = require("./src/handlers/productHandler.js");
+const {getProductHandler , addProductHandler , getProductsHandler ,updateProductHandler ,deleteProductHandler,searchProductsHandler} = require("./src/handlers/productHandler.js");
 const {getUsersHandler , getUserHandler ,updateUserHandler , deleteUserHandler} = require("./src/handlers/userHandler.js");
 const {getOrderHandler ,getOrdersHandler, createOrderHandler , updateOrderHandler } = require("./src/handlers/orderHandler.js");
 const {getCartHandler,createCartHandler,updateCartHandler  , deleteCartItemHandler} = require("./src/handlers/cartHandler.js");
@@ -29,6 +29,10 @@ app.post("/auth/login", (req,res) => loginHandler(req,res,db));
 app.get("/products", (req,res) => 
     getProductsHandler(req,res,db)
 ); //everyone can read products
+
+app.get("/products/search", (req,res) => 
+    searchProductsHandler(req,res,db)
+); //search for products
 
 app.get("/products/:id",validateParamMiddleware, (req,res) => 
     getProductHandler(req,res,db)

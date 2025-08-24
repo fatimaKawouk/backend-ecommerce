@@ -145,4 +145,59 @@ async function deleteProductHandler(req,res,db){
         
     }
 }
-module.exports= {getProductHandler ,getProductsHandler, addProductHandler , updateProductHandler , deleteProductHandler};
+
+
+async function searchProductsHandler(req,res,db){
+    try{
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const offset = (page - 1) * limit;
+        const sort = req.query.sort || 'title';
+        const order = req.query.order || 'asc';
+
+        const [{ count }] = await db('product').count('*');
+        let query =  db('product')
+        .select('*')
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sort,order)
+        .where('stock', '>=', req.query.available || 1);
+
+        if (req.query.q) {
+            query = query.where(function () {
+                this.where("title", "ilike", `%${req.query.q}%`)
+                    .orWhere("description", "ilike", `%${req.query.q}%`);
+            });
+        }
+
+        if(req.query.category){
+            query = query.where('category','=', req.query.category);
+        }
+        if(req.query.minPrice){
+            query = query.where('price', '>=', req.query.minPrice);
+        }
+        if(req.query.maxPrice){
+            query = query.where('price', '<=', req.query.maxPrice);
+        }
+        
+        const selected = await query;
+        res.status(200).json({
+            total: parseInt(count),
+            page,
+            totalPages: Math.ceil(count / limit),
+            selected
+        });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+        
+    }
+}
+
+module.exports= {getProductHandler ,
+    getProductsHandler, 
+    addProductHandler , 
+    updateProductHandler , 
+    deleteProductHandler,
+    searchProductsHandler};
