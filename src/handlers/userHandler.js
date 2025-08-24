@@ -12,9 +12,14 @@ async function getUsersHandler(req,res,db){
         const order = req.query.order || 'asc';
 
         const [{ count }] = await db('users').count('*');
-        const selected = await db('users').select('*').limit(limit)
+        let query =  db('users').select('*').limit(limit)
         .offset(offset)
         .orderBy(sort,order);
+
+        if(req.query.role){
+            query = query.where('role', '=', req.query.role);
+        }
+        const selected = await query;
         res.status(200).json({
             total: parseInt(count),
             page,

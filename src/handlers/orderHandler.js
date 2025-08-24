@@ -14,12 +14,25 @@ async function getOrderHandler(req,res,db){
         const [{ count }] = await db('orders').count('*');
         const sort = req.query.sort || 'total_amount';
         const order = req.query.order || 'asc';
-        const orders = await db('orders')
+        let query = db('orders')
         .select('*')
         .where('userid','=',id)
         .limit(limit)
         .offset(offset)
         .orderBy(sort,order);
+
+        if(req.query.minAmount){
+            query = query.where('total_amount', '>=', req.query.minAmount);
+        }
+        if(req.query.maxAmount){
+            query = query.where('total_amount', '<=', req.query.maxAmount);
+        }
+        if(req.query.status){
+            query = query.where('status', '=', req.query.status);
+        }
+
+
+        const orders = await query;
 
         res.status(200).json({ total: parseInt(count),
             page,
@@ -44,10 +57,20 @@ async function getOrdersHandler(req,res,db){
         const order = req.query.order || 'asc';
 
         const [{ count }] = await db('orders').count('*');
-
-        const orders= await db('orders').select('*').limit(limit)
+        let query =  db('orders').select('*').limit(limit)
         .offset(offset)
         .orderBy(sort,order);
+        
+        if(req.query.minAmount){
+            query = query.where('total_amount', '>=', req.query.minAmount);
+        }
+        if(req.query.maxAmount){
+            query = query.where('total_amount', '<=', req.query.maxAmount);
+        }
+        if(req.query.status){
+            query = query.where('status', '=', req.query.status);
+        }
+        const orders= await query;
         res.status(200).json({total: parseInt(count),
             page,
             totalPages: Math.ceil(count / limit),

@@ -24,10 +24,26 @@ async function getProductsHandler(req,res,db){
         const offset = (page - 1) * limit;
         const sort = req.query.sort || 'title';
         const order = req.query.order || 'asc';
+
         const [{ count }] = await db('product').count('*');
-        const selected = await db('product').select('*').limit(limit)
+        let query =  db('product')
+        .select('*')
+        .limit(limit)
         .offset(offset)
-        .orderBy(sort,order);
+        .orderBy(sort,order)
+        .where('stock', '>=', req.query.available || 1);
+
+        if(req.query.category){
+            query = query.where('category','=', req.query.category);
+        }
+        if(req.query.minPrice){
+            query = query.where('price', '>=', req.query.minPrice);
+        }
+        if(req.query.maxPrice){
+            query = query.where('price', '<=', req.query.maxPrice);
+        }
+        
+        const selected = await query;
         res.status(200).json({
             total: parseInt(count),
             page,

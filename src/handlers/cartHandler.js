@@ -14,17 +14,31 @@ async function getCartHandler(req,res,db){
 
         const [selected ]= await db('carts').select('*').where('userid','=',id);
         const [{ count }] = await db('cart_items').count('*') .where('cart_items.cartid', '=', selected.cid);
-        const cart = await db('cart_items')
+        let query = db('cart_items')
             .join('product', 'cart_items.productid', '=', 'product.pid')
             .select(
                 'cart_items.productid',
                 'cart_items.quantity',
                 'product.title',
-                'product.price'
+                'product.price',
+                'product.category'
             )
             .where('cart_items.cartid', '=', selected.cid).limit(limit)
+            .andWhere('stock', '>=', req.query.available || 1)
             .offset(offset)
             .orderBy(sort, order);
+
+        if(req.query.category){
+            query = query.where('category','=', req.query.category);
+        }
+        if(req.query.minPrice){
+            query = query.where('price', '>=', req.query.minPrice);
+        }
+        if(req.query.maxPrice){
+            query = query.where('price', '<=', req.query.maxPrice);
+        }
+
+        const cart = await query;
 
             const itemsWithSubtotal = cart.map(item => ({
                 ...item,

@@ -95,7 +95,7 @@ app.get("/orders",authenticateToken, (req,res) =>
 
 app.get("/orders/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
      getOrderHandler(req,res,db)
-); // admin can read specific order and user can only read his order passing userid as param
+); // admin can read specific users order and user can only read his orders passing userid as param
 
 app.put("/orders/:id", [authenticateToken ,validateParamMiddleware],(req,res) => 
     updateOrderHandler(req,res,db)
