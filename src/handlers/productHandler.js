@@ -16,7 +16,6 @@ async function getProductHandler(req,res,db){
         
     }
 }
-
 async function getProductsHandler(req,res,db){
     try{
         const page = parseInt(req.query.page) || 1;

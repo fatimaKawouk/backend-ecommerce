@@ -83,11 +83,6 @@ async function getOrdersHandler(req,res,db){
     }
 }
 
-const schema = Joi.object({
-    product : Joi.string().required(),
-    quantity:Joi.number().required().min(1),
-});
-
 
 async function createOrderHandler(req,res,db){
     try{ 

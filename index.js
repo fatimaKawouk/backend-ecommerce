@@ -7,8 +7,8 @@ const {loginHandler} = require("./src/handlers/loginHandler.js");
 const {getProductHandler , addProductHandler , getProductsHandler ,updateProductHandler ,deleteProductHandler,searchProductsHandler} = require("./src/handlers/productHandler.js");
 const {getUsersHandler , getUserHandler ,updateUserHandler , deleteUserHandler} = require("./src/handlers/userHandler.js");
 const {getOrderHandler ,getOrdersHandler, createOrderHandler , updateOrderHandler } = require("./src/handlers/orderHandler.js");
-const {getCartHandler,createCartHandler,updateCartHandler  , deleteCartItemHandler} = require("./src/handlers/cartHandler.js");
-
+const {createCartHandler,updateCartHandler  , deleteCartItemHandler} = require("./src/handlers/cartHandler.js");
+const{getCartHandler} = require("./src/handlers/getCartHandler.js")
 //middlewares
 const {authenticateToken} = require("./src/middlewares/authenticateToken.js");
 const {validateParamMiddleware} = require("./src/middlewares/validateParam.js");

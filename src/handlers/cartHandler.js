@@ -1,82 +1,12 @@
 const Joi = require("joi");
-
-async function getCartHandler(req,res,db){
-    try{
-    
-        if (req.role !== 'user') return res.status(403).json({error : 'Cannot Access'});
-        const id = req.uid;
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const offset = (page - 1) * limit;
-        const sort = req.query.sort || 'title';
-        const order = req.query.order || 'asc';
-
-        const [selected ]= await db('carts').select('*').where('userid','=',id);
-        const [{ count }] = await db('cart_items')
-        .join('product', 'cart_items.productid', '=', 'product.pid')
-        .count('*') 
-        .where('cart_items.cartid', '=', selected.cid)
-        .andWhere('product.stock', '>=', req.query.available || 1);
-        
-        let query = db('cart_items')
-            .join('product', 'cart_items.productid', '=', 'product.pid')
-            .select(
-                'cart_items.productid',
-                'cart_items.quantity',
-                'product.title',
-                'product.price',
-                'product.category'
-            )
-            .where('cart_items.cartid', '=', selected.cid).limit(limit)
-            .andWhere('stock', '>=', req.query.available || 1)
-            .offset(offset)
-            .orderBy(sort, order);
-
-        if(req.query.category){
-            query = query.where('category','=', req.query.category);
-        }
-        if(req.query.minPrice){
-            query = query.where('price', '>=', req.query.minPrice);
-        }
-        if(req.query.maxPrice){
-            query = query.where('price', '<=', req.query.maxPrice);
-        }
-
-        const cart = await query;
-
-            const itemsWithSubtotal = cart.map(item => ({
-                ...item,
-                subtotal: item.quantity * Number(item.price)
-            }));
-        const totalAmount = itemsWithSubtotal.reduce((sum, item) => sum + item.subtotal, 0);
-        res.status(200).json({total: parseInt(count),
-            page,
-            totalPages: Math.ceil(count / limit),
-            items: itemsWithSubtotal,
-            totalAmount});
-    }
-    catch(err){
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-        
-    }
-}
-
-
-const schema = Joi.object({
-    product : Joi.string().required(),
-    quantity:Joi.number().required().min(1),
-});
-
+const {validateProductBody} = require("./validateProduct");
 
 async function createCartHandler(req,res,db){
     try{ 
         if (req.role !== 'user') return res.status(403).json({error : 'Cannot Access'});
         const uid = req.uid;
-        const item = req.body;
-        const {error , value} = schema.validate(item);
-        if(error) return res.status(400).json({error : error.details[0].message});
-
+        const item= validateProductBody(req,res);
+        if(!item ) return;
         let [cart] = await db('carts').select('*').where('userid','=',uid);
         if(!cart ){
             [cart]  = await db('carts').insert({userid : uid }).returning('*');
@@ -85,20 +15,20 @@ async function createCartHandler(req,res,db){
         const existItem = await db('cart_items')
         .select('*')
         .where('cartid','=',cart.cid )
-        .andWhere('productid','=',value.product)
+        .andWhere('productid','=',item.product)
         .first();
         if(!existItem ){
             const [inserted] = await db('cart_items').insert( {
                     cartid: cart.cid ,
-                    productid: value.product,
-                    quantity: value.quantity,
+                    productid: item.product,
+                    quantity: item.quantity,
                 }).returning('*'); 
                 res.status(201).json({ message: 'Item added to cart successfully',inserted });
         }
         else{
            const [updateQuantity] = await db('cart_items')
            .where('cartid','=',cart.cid )
-           .update({quantity : existItem.quantity+value.quantity})
+           .update({quantity : existItem.quantity+item.quantity})
            .returning('*');
            res.status(201).json({ message: 'Item added to cart successfully',updateQuantity });
         }
@@ -169,4 +99,4 @@ async function deleteCartItemHandler(req,res,db){
         
     }
 }
-module.exports = {getCartHandler,createCartHandler,updateCartHandler, deleteCartItemHandler};
+module.exports = {createCartHandler,updateCartHandler, deleteCartItemHandler};
