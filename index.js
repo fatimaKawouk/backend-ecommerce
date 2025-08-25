@@ -59,10 +59,6 @@ app.post("/auth/register",(req,res) =>
     registerHandler(req,res,db)
 ); //user register 
 
-app.post("/users",authenticateToken, (req,res) => 
-    addProductHandler(req,res,db)
-); //admin create user
-
 app.get("/users",authenticateToken, (req,res) => 
     getUsersHandler(req,res,db)
 ); //admin read users
