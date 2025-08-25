@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const logger = require("../../logger.js");
 
 
 function calculateCartTotals(cartItems) {
@@ -34,7 +35,10 @@ function buildCartItemsQuery(db, cartId, queryParams) {
 async function getCartHandler(req,res,db){
     try{
     
-        if (req.role !== 'user') return res.status(403).json({error : 'Cannot Access'});
+        if (req.role !== 'user') {
+          logger.warn('Unauthorized attempt to fetch carts', { userId: req.uid, targetId: id });
+          return res.status(403).json({error : 'Cannot Access'});
+        }
         const id = req.uid;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -43,8 +47,10 @@ async function getCartHandler(req,res,db){
         const order = req.query.order || 'asc';
 
         const [selected ]= await db('carts').select('*').where('userid','=',id);
-        if(!selected) return res.status(404).json({ error: "Cart not found" });
-        
+        if(!selected) {
+            logger.warn('Cart not found for user', { userId: id });
+            return res.status(404).json({ error: "Cart not found" });
+          }
         const [{ count }] = await db('cart_items')
         .join('product', 'cart_items.productid', '=', 'product.pid')
         .count('*') 
@@ -56,6 +62,13 @@ async function getCartHandler(req,res,db){
         const cart = await query.offset(offset).limit(limit).orderBy(sort,order);
 
         const {itemsWithSubtotal , totalAmount}=calculateCartTotals(cart);
+        logger.info('Cart fetched successfully', {
+          userId: id,
+          itemCount: cart.length,
+          totalItems: parseInt(count),
+          page,
+          totalPages: Math.ceil(count / limit)
+        });
         res.status(200).json({total: parseInt(count),
             page,
             totalPages: Math.ceil(count / limit),
@@ -63,7 +76,7 @@ async function getCartHandler(req,res,db){
             totalAmount});
     }
     catch(err){
-        console.error(err);
+        logger.error('Failed to fetch cart', { userId: req.uid, error: err.message, stack: err.stack });
         res.status(500).json({ error: "Internal server error" });
         
     }

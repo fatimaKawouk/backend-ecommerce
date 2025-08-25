@@ -1,0 +1,67 @@
+{"level":"info","message":"Cart item quantity updated","newQuantity":6,"productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"info","message":"Cart item quantity updated","newQuantity":8,"productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"error":"Not enough stock for product : 682e6afb-0d78-4502-83ab-66df7aa240bb","level":"error","message":"Failed to create order","stack":"Error: Not enough stock for product : 682e6afb-0d78-4502-83ab-66df7aa240bb\n    at C:\\Users\\USER\\Desktop\\Back-ass2\\src\\handlers\\orderHandler.js:117:27\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":6,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":5,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":4,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":3,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":2,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":1,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":0,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","newQuantity":-1,"productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"info","message":"Product removed from cart","productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"error":"\"quantity\" must be one of [increase, decrease]","level":"info","message":"Validation failed for updating cart item","productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"error":"Cannot read properties of undefined (reading 'quantity')","level":"error","message":"Failed to update cart item","productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","stack":"TypeError: Cannot read properties of undefined (reading 'quantity')\n    at updateCartHandler (C:\\Users\\USER\\Desktop\\Back-ass2\\src\\handlers\\cartHandler.js:107:37)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"increase","level":"info","message":"Cart item updated successfully","productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"change":"decrease","level":"info","message":"Cart item updated successfully","productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"info","message":"Product deleted successfully from cart","productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"info","message":"Attempted to delete product not in cart","productId":"682e6afb-0d78-4502-83ab-66df7aa240bb","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"error":"id is not defined","level":"error","message":"Failed to fetch orders"}
+{"error":"id is not defined","level":"error","message":"Failed to fetch orders"}
+{"fetchedCount":6,"level":"info","message":"Fetched orders successfully","page":1,"total":30,"totalPages":5,"userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"fetchedCount":6,"level":"info","message":"Fetched orders successfully","page":1,"total":30,"totalPages":5,"userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"fetchedCount":6,"level":"info","message":"Fetched orders successfully","page":1,"total":30,"totalPages":5,"userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"level":"warn","message":"Order update validation failed","orderId":"7c129bb2-a2f3-4e11-a745-a0b2e2e43b21","validationError":"\"status\" is required"}
+{"level":"info","message":"Order updated successfully","newStatus":"completed","orderId":"7c129bb2-a2f3-4e11-a745-a0b2e2e43b21"}
+{"level":"info","message":"Order not found for update","orderId":"7c129bb2-a2f3-4e11-a745-a092e2e43b21"}
+{"level":"warn","message":"Unauthorized attempt to update order","targetOrder":"7c129bb2-a2f3-4e11-a745-a092e2e43b21","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"warn","message":"Unauthorized attempt to update order","targetOrder":"7c129bb2-a2f3-4e11-a745-a092e2e43b21","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"level":"info","message":"Order not found for update","orderId":"7c129bb2-a2f3-4e11-a745-a092e2e43b21"}
+{"error":"i is not defined","level":"error","message":"Failed to fetch orders","userId":"20eb692d-cd65-4020-ba47-626e41cbad21"}
+{"error":"i is not defined","level":"error","message":"Failed to fetch orders","userId":"20eb692d-cd65-4020-ba47-626e41cbad21"}
+{"fetchedCount":2,"level":"info","message":"Fetched orders successfully","page":1,"total":2,"totalPages":1,"userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"fetchedCount":3,"level":"info","message":"Fetched orders successfully","page":1,"total":3,"totalPages":1,"userId":"20eb692d-cd65-4020-ba47-626e41cbad21"}
+{"level":"info","message":"Products retrieved successfully","total":6}
+{"level":"info","message":"Products retrieved successfully","total":6}
+{"level":"info","message":"Products retrieved successfully","total":2}
+{"level":"info","message":"Products retrieved successfully","total":2}
+{"category":"Fashion","level":"debug","message":"Applied category filter"}
+{"level":"info","message":"Products retrieved successfully","total":2}
+{"category":"Electronics","level":"debug","message":"Applied category filter"}
+{"level":"info","message":"Products retrieved successfully","total":2}
+{"level":"info","message":"Product updated successfully","productId":"538a4875-f59f-4b9f-a2b5-c7124da6d7d7","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"error":"delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"order_items_productid_fkey\" on table \"order_items\"","level":"error","message":"Failed to delete product","stack":"error: delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"order_items_productid_fkey\" on table \"order_items\"\n    at Parser.parseErrorMessage (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:285:98)\n    at Parser.handlePacket (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:122:29)\n    at Parser.parse (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:35:38)\n    at Socket.<anonymous> (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\index.js:11:42)\n    at Socket.emit (node:events:518:28)\n    at addChunk (node:internal/streams/readable:561:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n    at Readable.push (node:internal/streams/readable:392:5)\n    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"level":"info","message":"Products retrieved successfully","total":6}
+{"error":"delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"order_items_productid_fkey\" on table \"order_items\"","level":"error","message":"Failed to delete product","stack":"error: delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"order_items_productid_fkey\" on table \"order_items\"\n    at Parser.parseErrorMessage (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:285:98)\n    at Parser.handlePacket (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:122:29)\n    at Parser.parse (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:35:38)\n    at Socket.<anonymous> (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\index.js:11:42)\n    at Socket.emit (node:events:518:28)\n    at addChunk (node:internal/streams/readable:561:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n    at Readable.push (node:internal/streams/readable:392:5)\n    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"level":"info","message":"Products retrieved successfully","total":6}
+{"error":"delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"cart_items_productid_fkey\" on table \"cart_items\"","level":"error","message":"Failed to delete product","stack":"error: delete from \"product\" where \"pid\" = $1 returning * - update or delete on table \"product\" violates foreign key constraint \"cart_items_productid_fkey\" on table \"cart_items\"\n    at Parser.parseErrorMessage (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:285:98)\n    at Parser.handlePacket (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:122:29)\n    at Parser.parse (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\parser.js:35:38)\n    at Socket.<anonymous> (C:\\Users\\USER\\Desktop\\Back-ass2\\node_modules\\pg-protocol\\dist\\index.js:11:42)\n    at Socket.emit (node:events:518:28)\n    at addChunk (node:internal/streams/readable:561:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n    at Readable.push (node:internal/streams/readable:392:5)\n    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"level":"debug","message":"Applied search query","q":"l"}
+{"level":"info","message":"Products search completed","page":1,"returned":4,"totalPages":1,"totalResults":4}
+{"category":"Fashion","level":"debug","message":"Applied category filter"}
+{"level":"info","message":"Products search completed","page":1,"returned":2,"totalPages":1,"totalResults":2}
+{"level":"warn","message":"Login attempt with invalid password","password":"mypass2004"}
+{"email":"ahmad@gmail.com","level":"info","message":"User logged in successfully","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"email":"ahmad@gmai2l.com","level":"warn","message":"Login attempt with invalid email"}
+{"email":"ahmad@gmai2l.com","level":"warn","message":"Login attempt with invalid email"}
+{"email":"ahmad@gmail.com","level":"info","message":"User logged in successfully","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"itemCount":2,"level":"info","message":"Cart fetched successfully","page":1,"totalItems":2,"totalPages":1,"userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"input":{"email":"leen@gmail.com","name":"Leen","password":"mypassleen"},"level":"warn","message":"User registration validation failed","reason":"\"re_password\" is required"}
+{"email":"leen@gmail.com","level":"info","message":"User registered successfully","role":"user"}
+{"email":"leen@gmail.com","level":"warn","message":"Password mismatch during registration"}
+{"level":"warn","message":"Unauthorized attempt to fetch users","userId":"0a3e4253-f323-452f-8287-cb8a5f04fdc5"}
+{"email":"fatima@gmail.com","level":"info","message":"User logged in successfully","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}
+{"adminId":"f85961f1-825d-4531-9dea-ec136c5dfbd7","fetchedCount":6,"level":"info","message":"Fetched users successfully","page":1,"total":9,"totalPages":2}
+{"level":"debug","message":"Applied role filter","role":"user"}
+{"adminId":"f85961f1-825d-4531-9dea-ec136c5dfbd7","fetchedCount":6,"level":"info","message":"Fetched users successfully","page":1,"total":8,"totalPages":2}
+{"level":"info","message":"Fetched user successfully","targetId":"e02e01e3-2f1e-42b3-9a63-b0247dd13099","userId":"f85961f1-825d-4531-9dea-ec136c5dfbd7"}

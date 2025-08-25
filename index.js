@@ -42,7 +42,7 @@ app.post("/products",authenticateToken, (req,res) =>
     addProductHandler(req,res,db)
 );//admin add products
 
-app.put("/products/:id", [authenticateToken ,validateParamMiddleware] ,(req,res) => 
+app.patch("/products/:id", [authenticateToken ,validateParamMiddleware] ,(req,res) => 
     updateProductHandler(req,res,db)
 );//admin update products
 
@@ -101,7 +101,7 @@ app.get("/orders/:id",[authenticateToken ,validateParamMiddleware], (req,res) =>
      getOrderHandler(req,res,db)
 ); // admin can read specific users order and user can only read his orders passing userid as param
 
-app.put("/orders/:id", [authenticateToken ,validateParamMiddleware],(req,res) => 
+app.patch("/orders/:id", [authenticateToken ,validateParamMiddleware],(req,res) => 
     updateOrderHandler(req,res,db)
 );//admin can edit order status
 
